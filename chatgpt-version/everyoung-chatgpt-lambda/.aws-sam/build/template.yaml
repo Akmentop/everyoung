@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: everyoung-chatgpt-lambda
+Transform:
+- AWS::Serverless-2016-10-31
+Resources:
+  everyoungChatgptLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/everyoung-chatgpt-lambda.lambdaHandler
+      Runtime: nodejs20.x
+      Architectures:
+      - x86_64
+      MemorySize: 128
+      Timeout: 300
+      Description: Lambda function to use Chat GPT to search for best matched name
+        from a list
+      Policies:
+      - Version: '2012-10-17'
+        Statement:
+        - Action: secretsmanager:GetSecretValue
+          Effect: Allow
+          Resource: arn:aws:secretsmanager:ap-southeast-2:738498048247:secret:openapi-key-YQLCL9
+      Environment:
+        Variables:
+          SECRET_NAME: arn:aws:secretsmanager:ap-southeast-2:738498048247:secret:openapi-key-YQLCL9
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /findNameMatch
+            Method: POST
+      CodeUri: everyoungChatgptLambda
+    Metadata:
+      SamResourceId: everyoungChatgptLambda

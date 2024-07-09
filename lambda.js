@@ -70,35 +70,3 @@ function searchForName(input) {
         return 'no name found';
     }
 }
-
-export const handler = async (event) => {
-    let res = '';
-    
-    if (event.searchName) {
-      res = searchForName(event.searchName)
-    } else {
-      if (event.body === undefined) {
-        const response = {
-          statusCode: 400,
-          body: 'no search string provided',
-        };
-        return response;
-      }
-
-      let body = JSON.parse(event.body)
-      
-      if (body.searchName === undefined) {
-        const response = {
-          statusCode: 400,
-          body: 'no search string provided',
-        };
-        return response;
-      }
-      res = searchForName(body.searchName)
-    }
-     const response = {
-       statusCode: 200,
-       body: res,
-     };
-     return response;
-   };
